@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Swap Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/opencv.js/4.7.0/opencv.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        .upload-box {
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+            transition: all 0.3s ease;
+            min-height: 300px;
+        }
+        .upload-box:hover {
+            border-color: #764ba2;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .upload-instructions {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+        .primary-button, .secondary-button {
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .primary-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        .secondary-button {
+            background: #2ecc71;
+            color: white;
+            border: none;
+        }
+        .quality-selector {
+            margin: 2rem 0;
+            font-size: 1.1rem;
+        }
+        .quality-selector select {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-left: 1rem;
+        }
+        .status-message {
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+        .result-section {
+            background: rgba(248, 249, 250, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 3rem;
+        }
+        footer {
+            margin-top: 3rem;
+            font-size: 1rem;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1rem; }
+            .upload-box { min-height: 200px; }
+            .primary-button, .secondary-button { font-size: 1rem; }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Face Swap Pro</h1>
+            <p class="subtitle">Advanced Face Swapping Tool</p>
+        </header>
+        
+        <div class="upload-section">
+            <div class="source-image">
+                <h3>Source Face</h3>
+                <div class="upload-box">
+                    <input type="file" id="sourceImage" accept="image/*">
+                    <img id="sourcePreview" class="preview">
+                    <div class="loading-spinner" id="sourceLoading"></div>
+                    <div class="upload-instructions">Click or drag image here</div>
+                </div>
+            </div>
+
+            <div class="target-media">
+                <h3>Target Image/Video</h3>
+                <div class="upload-box">
+                    <input type="file" id="targetMedia" accept="image/*,video/*">
+                    <img id="targetPreview" class="preview">
+                    <video id="targetVideo" class="preview" autoplay muted></video>
+                    <div class="loading-spinner" id="targetLoading"></div>
+                    <div class="upload-instructions">Click or drag media here</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="swapButton" class="primary-button">Swap Face</button>
+            <div class="download-options">
+                <div class="quality-selector">
+                    <label for="imageQuality">Quality:</label>
+                    <select id="imageQuality">
+                        <option value="1">Best Quality</option>
+                        <option value="0.8">High Quality</option>
+                        <option value="0.6">Medium Quality</option>
+                    </select>
+                </div>
+                <div class="download-buttons">
+                    <button id="downloadPngButton" class="secondary-button">Save as PNG</button>
+                    <button id="downloadJpgButton" class="secondary-button">Save as JPG</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-container">
+            <div class="status-message" id="statusMessage"></div>
+            <div class="loading-spinner" id="mainLoading"></div>
+        </div>
+        
+        <div class="result-section">
+            <h3>Result Preview</h3>
+            <canvas id="outputCanvas"></canvas>
+        </div>
+
+        <footer>
+            <p>© 2024 Face Swap Pro. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
