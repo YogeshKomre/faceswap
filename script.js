@@ -91,4 +91,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize
     elements.downloadOptions.style.display = 'none';
     updateStatus('Ready to swap faces', 'primary');
+    function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type} show animate`;
+    
+    setTimeout(() => {
+        notification.className = 'notification';
+    }, 3000);
+}
+
+// Use it after successful face swap:
+showNotification('Face swap completed successfully!');
+
+// Or for errors:
+showNotification('Error during face swap process', 'error');
 });
