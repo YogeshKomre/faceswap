@@ -4,46 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Face Swap Pro</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/opencv.js/4.7.0/opencv.js"></script>
     <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 2rem;
         }
         .container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             text-align: center;
             width: 100%;
-            max-width: 1200px;
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        h1 {
-            font-size: 3rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 3rem;
-        }
-        h3 {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
         }
         .upload-box {
             background: rgba(255, 255, 255, 0.8);
@@ -51,75 +28,169 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            border-radius: 15px;
-            border: 2px dashed #667eea;
-            transition: all 0.3s ease;
-            min-height: 300px;
-        }
-        .upload-box:hover {
-            border-color: #764ba2;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        .upload-instructions {
-            font-size: 1.1rem;
-            color: #666;
-            margin-top: 1rem;
-        }
-        .primary-button, .secondary-button {
-            font-size: 1.1rem;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .primary-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-        }
-        .secondary-button {
-            background: #2ecc71;
-            color: white;
-            border: none;
-        }
-        .quality-selector {
-            margin: 2rem 0;
-            font-size: 1.1rem;
-        }
-        .quality-selector select {
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            border-radius: 8px;
-            margin-left: 1rem;
-        }
-        .status-message {
-            font-size: 1.2rem;
-            margin: 1rem 0;
         }
         .result-section {
             background: rgba(248, 249, 250, 0.9);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        footer {
-            margin-top: 3rem;
-            font-size: 1rem;
-            color: #666;
-            border-top: 1px solid #eee;
-            padding-top: 2rem;
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
         }
-        @media (max-width: 768px) {
-            body { padding: 1rem; }
-            h1 { font-size: 2rem; }
-            .subtitle { font-size: 1rem; }
-            .upload-box { min-height: 200px; }
-            .primary-button, .secondary-button { font-size: 1rem; }
+        .quality-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .preview {
+            margin: 0 auto;
         }
     </style>
-    </style>
+        <style>
+            body {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                padding: 2rem;
+            }
+            .container {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                text-align: center;
+                width: 100%;
+                max-width: 1200px;
+                padding: 3rem 2rem;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+            h1 {
+                font-size: 3rem;
+                color: #2c3e50;
+                margin-bottom: 1rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+                color: #666;
+                margin-bottom: 3rem;
+            }
+            h3 {
+                font-size: 1.5rem;
+                color: #2c3e50;
+                margin-bottom: 1.5rem;
+            }
+            .upload-box {
+                background: rgba(255, 255, 255, 0.8);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                border-radius: 15px;
+                border: 2px dashed #667eea;
+                transition: all 0.3s ease;
+                min-height: 300px;
+            }
+            .upload-box:hover {
+                border-color: #764ba2;
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+            .upload-instructions {
+                font-size: 1.1rem;
+                color: #666;
+                margin-top: 1rem;
+            }
+            .primary-button, .secondary-button {
+                font-size: 1.1rem;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+            .primary-button {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+            }
+            .secondary-button {
+                background: #2ecc71;
+                color: white;
+                border: none;
+            }
+            .quality-selector {
+                margin: 2rem 0;
+                font-size: 1.1rem;
+            }
+            .quality-selector select {
+                padding: 0.5rem 1rem;
+                font-size: 1rem;
+                border-radius: 8px;
+                margin-left: 1rem;
+            }
+            .status-message {
+                font-size: 1.2rem;
+                margin: 1rem 0;
+            }
+            .result-section {
+                background: rgba(248, 249, 250, 0.9);
+                padding: 2rem;
+                border-radius: 15px;
+                margin-top: 3rem;
+            }
+            footer {
+                margin-top: 3rem;
+                font-size: 1rem;
+                color: #666;
+                border-top: 1px solid #eee;
+                padding-top: 2rem;
+            }
+            @media (max-width: 768px) {
+                body { padding: 1rem; }
+                h1 { font-size: 2rem; }
+                .subtitle { font-size: 1rem; }
+                .upload-box { min-height: 200px; }
+                .primary-button, .secondary-button { font-size: 1rem; }
+            }
+        </style>
+            <style>
+                /* ... existing styles ... */
+        
+                .result-section {
+                    background: rgba(248, 249, 250, 0.9);
+                    padding: 2rem;
+                    border-radius: 15px;
+                    margin-top: 3rem;
+                    width: 100%;
+                }
+        
+                #outputCanvas {
+                    display: block;
+                    max-width: 100%;
+                    height: auto;
+                    margin: 1.5rem auto;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+        
+                .preview {
+                    display: block;
+                    max-width: 100%;
+                    height: auto;
+                    margin: 1rem auto;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                /* Remove the duplicate style tag */
+                </style>
+                <!-- Remove this extra closing style tag -->
 </head>
 <body>
     <div class="container">
@@ -133,7 +204,7 @@
                 <h3>Source Face</h3>
                 <div class="upload-box">
                     <input type="file" id="sourceImage" accept="image/*">
-                    <img id="sourcePreview" class="preview">
+                    <img id="sourcePreview" class="preview" alt="Source preview">
                     <div class="loading-spinner" id="sourceLoading"></div>
                     <div class="upload-instructions">Click or drag image here</div>
                 </div>
@@ -143,7 +214,7 @@
                 <h3>Target Image/Video</h3>
                 <div class="upload-box">
                     <input type="file" id="targetMedia" accept="image/*,video/*">
-                    <img id="targetPreview" class="preview">
+                    <img id="targetPreview" class="preview" alt="Target preview">
                     <video id="targetVideo" class="preview" autoplay muted></video>
                     <div class="loading-spinner" id="targetLoading"></div>
                     <div class="upload-instructions">Click or drag media here</div>
@@ -162,16 +233,13 @@
                         <option value="0.6">Medium Quality</option>
                     </select>
                 </div>
-                <div class="download-buttons">
-                    <button id="downloadPngButton" class="secondary-button">Save as PNG</button>
-                    <button id="downloadJpgButton" class="secondary-button">Save as JPG</button>
-                </div>
             </div>
         </div>
 
-        <div class="status-container">
-            <div class="status-message" id="statusMessage"></div>
-            <div class="loading-spinner" id="mainLoading"></div>
+        <div class="download-buttons">
+            <button id="downloadPngButton" class="secondary-button image-download">Download PNG</button>
+            <button id="downloadJpgButton" class="secondary-button image-download">Download JPG</button>
+            <button id="downloadVideoButton" class="secondary-button video-download">Download Video</button>
         </div>
         
         <div class="result-section">
