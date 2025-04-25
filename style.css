@@ -168,3 +168,50 @@ body {
     h1 { font-size: 2rem; }
     .upload-section { grid-template-columns: 1fr; }
 }
+#outputVideo {
+    display: none;
+    max-width: 100%;
+    margin: 1rem auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.format-selector {
+    margin-bottom: 1rem;
+}
+
+.video-download {
+    display: none;
+    background: #3498db !important;
+}
+
+.format-selector select,
+.quality-selector select {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+.download-options {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.result-section .download-options {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.result-section .download-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
